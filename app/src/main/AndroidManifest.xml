@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.example">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Not a real app, just a skeleton to show code depending
-	 on library with lint checks producing errors in the report -->
+    <application>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter android:label="anc">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data
+                    android:host="abc"
+                    android:scheme="abc" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>

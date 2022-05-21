@@ -15,7 +15,9 @@
  */
 package com.example.lint.checks
 
+
 import com.android.tools.lint.checks.infrastructure.TestFiles.java
+import com.android.tools.lint.checks.infrastructure.TestFiles.manifest
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
 import org.junit.Test
 
@@ -23,26 +25,31 @@ import org.junit.Test
 class SampleCodeDetectorTest {
     @Test
     fun testBasic() {
-        lint().files(
-            java(
-                """
-                    package test.pkg;
-                    public class TestClass1 {
-                        // In a comment, mentioning "lint" has no effect
-                        private static String s1 = "Ignore non-word usages: linting";
-                        private static String s2 = "Let's say it: lint";
-                    }
-                    """
-            ).indented()
-        )
-            .issues(SampleCodeDetector.ISSUE)
+        lint().files(manifest(
+            """<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter android:label="@string/filter_view_example_gizmos">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="example"
+                    android:host="gizmos" />
+            </intent-filter>
+
+        </activity>
+    </application>
+
+</manifest>"""
+        ).indented()).allowMissingSdk()
+            .issues(SampleManifestDetector.ManifestIssue)
             .run()
             .expect(
-                """
-                    src/test/pkg/TestClass1.java:5: Warning: This code mentions lint: Congratulations [SampleId]
-                        private static String s2 = "Let's say it: lint";
-                                                   ~~~~~~~~~~~~~~~~~~~~
-                    0 errors, 1 warnings
+                """ Beware you are adding a new Route link
                     """
             )
     }

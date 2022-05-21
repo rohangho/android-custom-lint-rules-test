@@ -10,9 +10,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
+    lint {
         checkDependencies true
+        baseline file("lint-baseline.xml")
     }
+    namespace 'com.example.lint.library'
 }
 
 /** Package the given lint checks library into this AAR  */
